@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src = './lib/three.js'></script>
+</head>
+<body>
+    <script>
+        //创建渲染器，添加到dom当中, antialias（是否启用抗锯齿）
+        var renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setSize( window.innerWidth, window.innerHeight,false);
+        document.body.appendChild( renderer.domElement );
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 4000 );
+        camera.position.set(0,0,3);
+        
+        //创建一个平行光光源照射到物体上
+        var light = new THREE.DirectionalLight(0xffffff, 1.5)
+        //设置平型光照射方向，照射方向为设置的点照射到原点
+        light.position.set(0,0,1)
+        scene.add(light)
+        
+        //创建一个接受光照并带有纹理映射的立方体，并添加到场景中
+        //首先，获取到纹理
+        // var texture = THREE.ImageUtils.loadTexture('./threeJS/examples/textures/disturb.jpg')
+        var texture = new THREE.TextureLoader().load('./threeJS/examples/textures/disturb.jpg') 
+        //然后创建一个phong材质来处理着色，并传递给纹理映射
+        var material = new THREE.MeshPhongMaterial({map: texture})
+        var geometry = new THREE.CubeGeometry(1,1,1)
+        var cube = new THREE.Mesh(geometry, material);
+
+        scene.add(cube)
+
+        var rotationBool = true;
+        (function animate(){
+            renderer.render(scene, camera);
+            if(rotationBool){
+                cube.rotation.x += 0.02
+                cube.rotation.y += 0.02
+            }
+            requestAnimationFrame(animate)
+        })()
+
+        document.body.onclick = function(){
+            rotationBool = !rotationBool
+        }
+
+        
+    </script>
+</body>
+</html>

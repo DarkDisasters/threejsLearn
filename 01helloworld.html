@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src = './lib/three.js'></script>
+    <script src = './lib/TrackballControls.js'></script>
 </head>
 <body>
     <script>
@@ -28,11 +29,35 @@
         //将相机沿z轴偏移5
         camera.position.z = 5;
 
+        var controls;
+        function render() {
+            controls = new THREE.TrackballControls( camera );
+            //旋转速度
+            controls.rotateSpeed = 5;
+            //变焦速度
+            controls.zoomSpeed = 3;
+            //平移速度
+            controls.panSpeed = 0.8;
+            //是否不变焦
+            controls.noZoom = false;
+            //是否不平移
+            controls.noPan = false;
+            //是否开启移动惯性
+            controls.staticMoving = false;
+            //动态阻尼系数 就是灵敏度
+            controls.dynamicDampingFactor = 0.3;
+            //未知，占时先保留
+            //controls.keys = [ 65, 83, 68 ];
+            controls.addEventListener( 'change', render );
+        }
+
         function animate(){
             //一秒钟调用60次，也就是以每秒60帧的频率来绘制场景
+            // controls.update()
             requestAnimationFrame(animate)
             cube.rotation.x += 0.01;
             cube.rotation.y += 0.01;
+            // render()
             renderer.render(scene, camera)
         }
 
